@@ -9,62 +9,16 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     
-    <!-- FIREBASE INTEGRATION -->
-    <script type="module">
-        // Import specific SDKs using the version you provided (12.6.0)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-analytics.js";
-        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-
-        // --- YOUR CONFIGURATION ---
-        const firebaseConfig = {
-            apiKey: "AIzaSyBX6V9PGXSLQRU0CVV6-QJS4thyzNKxe6E",
-            authDomain: "sidhanth-os.firebaseapp.com",
-            projectId: "sidhanth-os",
-            storageBucket: "sidhanth-os.firebasestorage.app",
-            messagingSenderId: "45407383238",
-            appId: "1:45407383238:web:c7eb051b157c0beb0ff1c7",
-            measurementId: "G-GC76TZDEPW"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
-
-        // Expose Firebase functions to Window so Alpine.js can use them
-        window.db = db;
-        window.doc = doc;
-        window.setDoc = setDoc;
-        window.onSnapshot = onSnapshot;
-        
-        console.log("🔥 Firebase Initialized: Sidhanth OS Online");
-    </script>
-
     <!-- UI CONFIG -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    colors: {
-                        bg: '#050505',
-                        surface: '#121212',
-                        border: '#27272a',
-                        primary: '#3b82f6',
-                        accent: '#10b981',
-                        danger: '#ef4444'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    animation: {
-                        'blink': 'blink 1s step-end infinite',
-                    },
-                    keyframes: {
-                        blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0' } }
-                    }
+                    colors: { bg: '#050505', surface: '#121212', border: '#27272a', primary: '#3b82f6', accent: '#10b981', danger: '#ef4444' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    animation: { 'blink': 'blink 1s step-end infinite' },
+                    keyframes: { blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0' } } }
                 }
             }
         }
@@ -81,6 +35,183 @@
         .glitch::before { color: #f0f; z-index: -1; transform: translate(2px, 0); }
         .glitch::after { color: #0ff; z-index: -2; transform: translate(-2px, 0); }
     </style>
+
+    <!-- FIREBASE INTEGRATION (STABLE VERSION 10.13.0) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics.js";
+        import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+        // YOUR EXACT CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyBX6V9PGXSLQRU0CVV6-QJS4thyzNKxe6E",
+            authDomain: "sidhanth-os.firebaseapp.com",
+            projectId: "sidhanth-os",
+            storageBucket: "sidhanth-os.firebasestorage.app",
+            messagingSenderId: "45407383238",
+            appId: "1:45407383238:web:c7eb051b157c0beb0ff1c7",
+            measurementId: "G-GC76TZDEPW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Expose to Global Scope for Alpine
+        window.db = db;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.onSnapshot = onSnapshot;
+        window.firebaseLoaded = true;
+        
+        console.log("🔥 Firebase v10.13.0 Initialized Successfully");
+    </script>
+
+    <!-- APP LOGIC -->
+    <script>
+        function systemOS() {
+            return {
+                authenticated: sessionStorage.getItem('sidhanth_auth') === 'true',
+                passwordInput: '',
+                systemPass: 'admin', 
+                mode: 'wfh',
+                manualOverride: false,
+                currentTime: '',
+                currentDate: '',
+                currentDirective: 'INITIALIZING...',
+                streak: 1,
+                
+                tasks: [
+                    { id: 1, name: 'Wake Up 05:00 AM', completed: false },
+                    { id: 2, name: 'CELPIP Study (2+ Hours)', completed: false },
+                    { id: 3, name: 'Gym Session', completed: false },
+                    { id: 4, name: 'LeetCode (1 Problem)', completed: false },
+                    { id: 5, name: 'Clean Diet (100% Adherence)', completed: false },
+                    { id: 6, name: 'Clean Living (No Slacking)', completed: false }
+                ],
+                
+                wfhSchedule: [ { time: '05:00 - 05:15', activity: 'Wake Up Protocol', notes: 'Cold Water.' }, { time: '05:15 - 06:00', activity: 'System Prep', notes: 'Coffee.' }, { time: '06:00 - 07:45', activity: 'Deep Work: CELPIP', notes: 'Fresh Brain.' }, { time: '07:45 - 09:15', activity: 'Physical Training', notes: 'Heavy Weights.' }, { time: '09:30 - 13:00', activity: 'AI Engineering', notes: 'Deep Focus.' }, { time: '13:00 - 13:30', activity: 'Fuel + LeetCode', notes: '1 Problem.' }, { time: '13:30 - 17:00', activity: 'Engineering Cont.', notes: 'Execution.' }, { time: '18:00 - 19:30', activity: 'CELPIP Block 2', notes: 'Drills.' }, { time: '21:30', activity: 'Sleep Protocol', notes: 'Recovery.' } ],
+                officeSchedule: [ { time: '05:00 - 07:00', activity: 'Deep Work: CELPIP', notes: 'Study.' }, { time: '07:15 - 08:00', activity: 'Gym (Speed Run)', notes: 'Intensity.' }, { time: '08:15 - 09:00', activity: 'Commute', notes: 'Audio.' }, { time: '09:00 - 17:00', activity: 'Office Work', notes: 'Lunch: LC.' }, { time: '18:00 - 19:30', activity: 'Evening Review', notes: 'Light Study.' }, { time: '21:30', activity: 'Sleep Protocol', notes: 'Recovery.' } ],
+
+                init() {
+                    this.updateTime();
+                    setInterval(() => this.updateTime(), 1000);
+                    this.waitForFirebase();
+                },
+
+                waitForFirebase() {
+                    let attempts = 0;
+                    const check = setInterval(() => {
+                        if (window.firebaseLoaded) {
+                            clearInterval(check);
+                            console.log("System synced with Cloud.");
+                            this.syncCloud();
+                        } else {
+                            attempts++;
+                            if(attempts > 50) { // 10 seconds timeout
+                                console.error("Firebase timeout. Check internet."); 
+                                clearInterval(check);
+                            }
+                        }
+                    }, 200);
+                },
+
+                login() {
+                    if(this.passwordInput === this.systemPass) {
+                        this.authenticated = true;
+                        sessionStorage.setItem('sidhanth_auth', 'true');
+                        this.syncCloud();
+                    }
+                },
+                logout() { this.authenticated = false; sessionStorage.removeItem('sidhanth_auth'); },
+                setMode(m) { this.mode = m; this.manualOverride = true; },
+                
+                updateTime() {
+                    const now = new Date();
+                    this.currentTime = now.toLocaleTimeString('en-US', { hour12: false });
+                    this.currentDate = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                    if (!this.manualOverride) {
+                        const day = now.getDay(); 
+                        const isOffice = (day === 2 || day === 4); 
+                        if (isOffice && this.mode !== 'office') this.mode = 'office';
+                        if (!isOffice && day !== 0 && day !== 6 && this.mode !== 'wfh') this.mode = 'wfh';
+                    }
+                    const hour = now.getHours();
+                    if (hour < 5) this.currentDirective = "SLEEP RECOVERY";
+                    else if (hour < 7) this.currentDirective = "DEEP STUDY (CELPIP)";
+                    else if (hour < 9) this.currentDirective = (this.mode === 'office') ? "COMMUTE / GYM" : "GYM / SAUNA";
+                    else if (hour < 13) this.currentDirective = "WORK (ENGINEERING)";
+                    else if (hour < 14) this.currentDirective = "LEETCODE + FUEL";
+                    else if (hour < 17) this.currentDirective = "WORK (ENGINEERING)";
+                    else if (hour < 20) this.currentDirective = "STUDY / DECOMPRESS";
+                    else if (hour < 22) this.currentDirective = "WIND DOWN";
+                    else this.currentDirective = "SLEEP RECOVERY";
+                },
+
+                get progress() {
+                    const done = this.tasks.filter(t => t.completed).length;
+                    return Math.round((done / this.tasks.length) * 100);
+                },
+
+                async toggleTask(id) {
+                    this.tasks = this.tasks.map(t => {
+                        if (t.id === id) {
+                            const newState = !t.completed;
+                            if(newState) confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+                            return { ...t, completed: newState };
+                        }
+                        return t;
+                    });
+                    if (this.progress === 100) this.triggerBigConfetti();
+                    await this.saveToCloud();
+                },
+
+                triggerBigConfetti() {
+                    var duration = 3 * 1000;
+                    var animationEnd = Date.now() + duration;
+                    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+                    var interval = setInterval(function() {
+                      var timeLeft = animationEnd - Date.now();
+                      if (timeLeft <= 0) return clearInterval(interval);
+                      var particleCount = 50 * (timeLeft / duration);
+                      confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+                    }, 250);
+                },
+
+                async syncCloud() {
+                    if (!window.db) return;
+                    const docRef = window.doc(window.db, "users", "sidhanth");
+                    window.onSnapshot(docRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            const serverDate = data.lastOpenDate;
+                            const today = new Date().toDateString();
+                            if (serverDate !== today) {
+                                this.tasks = this.tasks.map(t => ({ ...t, completed: false }));
+                                if (serverDate) this.streak = (data.streak || 0) + 1;
+                                this.saveToCloud(today);
+                            } else {
+                                this.tasks = data.tasks;
+                                this.streak = data.streak;
+                            }
+                        } else {
+                            this.saveToCloud();
+                        }
+                    });
+                },
+
+                async saveToCloud(forceDate) {
+                    if (!window.db) return;
+                    const today = forceDate || new Date().toDateString();
+                    await window.setDoc(window.doc(window.db, "users", "sidhanth"), {
+                        tasks: this.tasks,
+                        streak: this.streak,
+                        lastOpenDate: today
+                    });
+                }
+            }
+        }
+    </script>
 </head>
 
 <body class="min-h-screen font-sans selection:bg-primary selection:text-white" x-data="systemOS()">
@@ -96,18 +227,9 @@
             <h1 class="text-4xl font-bold text-white glitch" data-text="SIDHANTH.PRO">SIDHANTH.PRO</h1>
             <div class="relative">
                 <span class="absolute left-3 top-3 text-gray-500">></span>
-                <input 
-                    type="password" 
-                    x-model="passwordInput" 
-                    @keyup.enter="login()"
-                    placeholder="ENTER PASSCODE"
-                    class="w-full bg-surface border border-border rounded p-3 pl-8 text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition-all"
-                    autofocus
-                >
+                <input type="password" x-model="passwordInput" @keyup.enter="login()" placeholder="ENTER PASSCODE" class="w-full bg-surface border border-border rounded p-3 pl-8 text-white focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent transition-all" autofocus>
             </div>
-            <button @click="login()" class="w-full bg-white text-black font-bold py-3 hover:bg-gray-200 transition-colors uppercase text-sm tracking-widest">
-                Initialize System
-            </button>
+            <button @click="login()" class="w-full bg-white text-black font-bold py-3 hover:bg-gray-200 transition-colors uppercase text-sm tracking-widest">Initialize System</button>
         </div>
     </div>
 
@@ -127,10 +249,8 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-
-            <!-- LEFT COL: Schedules (8 cols wide) -->
+            <!-- LEFT COL -->
             <div class="lg:col-span-8 space-y-6">
-                
                 <div class="flex space-x-4 mb-4">
                     <button @click="setMode('wfh')" :class="mode === 'wfh' ? 'bg-primary text-white' : 'bg-surface text-gray-400 border border-border'" class="px-6 py-2 rounded-lg font-bold text-sm transition-all hover:bg-opacity-90">WFH PROTOCOL (M/W/F)</button>
                     <button @click="setMode('office')" :class="mode === 'office' ? 'bg-primary text-white' : 'bg-surface text-gray-400 border border-border'" class="px-6 py-2 rounded-lg font-bold text-sm transition-all hover:bg-opacity-90">OFFICE PROTOCOL (T/TH)</button>
@@ -138,21 +258,10 @@
 
                 <!-- Schedule Table -->
                 <div class="card rounded-2xl overflow-hidden">
-                    <div class="p-6 border-b border-border flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span> 
-                            Daily Timeline
-                        </h2>
-                        <span class="text-xs font-mono text-gray-500 border border-border px-2 py-1 rounded">EST TIMEZONE</span>
-                    </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-sm">
                             <thead class="bg-surface text-gray-400 font-mono text-xs uppercase">
-                                <tr>
-                                    <th class="px-6 py-3">Time</th>
-                                    <th class="px-6 py-3">Activity</th>
-                                    <th class="px-6 py-3">Directives / Notes</th>
-                                </tr>
+                                <tr><th class="px-6 py-3">Time</th><th class="px-6 py-3">Activity</th><th class="px-6 py-3">Directives / Notes</th></tr>
                             </thead>
                             <tbody class="divide-y divide-border">
                                 <template x-for="slot in (mode === 'wfh' ? wfhSchedule : officeSchedule)">
@@ -167,37 +276,18 @@
                     </div>
                 </div>
 
-                <!-- Nutrition Module -->
+                <!-- Fuel Module -->
                 <div class="card rounded-2xl p-6">
                     <h2 class="text-lg font-bold text-white mb-4 border-b border-border pb-2">Fuel Logistics</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                         <div class="space-y-4">
-                            <div>
-                                <span class="text-xs font-mono text-primary uppercase block mb-1">06:00 AM - Activation</span>
-                                <p class="text-gray-300">Shilajit/Lemon Water + Black Coffee <span class="text-xs text-gray-500">(No Food)</span></p>
-                            </div>
-                            <div>
-                                <span class="text-xs font-mono text-primary uppercase block mb-1">Breakfast</span>
-                                <p class="text-white font-medium">Overnight Oats + 4 Boiled Egg Whites</p>
-                                <p class="text-gray-500 text-xs mt-1">Oats, Chia, Flax, Berries. Pre-made.</p>
-                            </div>
-                            <div>
-                                <span class="text-xs font-mono text-primary uppercase block mb-1">Lunch</span>
-                                <p class="text-white font-medium">150g Chicken + Brown Rice + Broccoli</p>
-                                <p class="text-gray-500 text-xs mt-1">Dessert: 1 Oikos Yogurt.</p>
-                            </div>
+                            <div><span class="text-xs font-mono text-primary uppercase block mb-1">06:00 AM - Activation</span><p class="text-gray-300">Shilajit/Lemon Water + Black Coffee</p></div>
+                            <div><span class="text-xs font-mono text-primary uppercase block mb-1">Breakfast</span><p class="text-white font-medium">Overnight Oats + 4 Boiled Egg Whites</p></div>
+                            <div><span class="text-xs font-mono text-primary uppercase block mb-1">Lunch</span><p class="text-white font-medium">150g Chicken + Brown Rice + Broccoli</p></div>
                         </div>
                         <div class="space-y-4">
-                            <div>
-                                <span class="text-xs font-mono text-primary uppercase block mb-1">Post-Workout</span>
-                                <p class="text-white font-medium">50g Whey Isolate Shake</p>
-                                <p class="text-gray-500 text-xs mt-1">+ L-Carnitine, Collagen, Creatine.</p>
-                            </div>
-                            <div>
-                                <span class="text-xs font-mono text-primary uppercase block mb-1">Dinner (Light)</span>
-                                <p class="text-white font-medium">2 Eggs + Salad OR Dal/Roti</p>
-                                <p class="text-gray-500 text-xs mt-1">Keep it light for sleep quality.</p>
-                            </div>
+                            <div><span class="text-xs font-mono text-primary uppercase block mb-1">Post-Workout</span><p class="text-white font-medium">50g Whey Isolate Shake</p></div>
+                            <div><span class="text-xs font-mono text-primary uppercase block mb-1">Dinner (Light)</span><p class="text-white font-medium">2 Eggs + Salad OR Dal/Roti</p></div>
                         </div>
                     </div>
                 </div>
@@ -262,202 +352,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function systemOS() {
-            return {
-                // AUTH DATA
-                authenticated: sessionStorage.getItem('sidhanth_auth') === 'true',
-                passwordInput: '',
-                systemPass: 'admin', 
-
-                mode: 'wfh',
-                manualOverride: false,
-                currentTime: '',
-                currentDate: '',
-                currentDirective: 'INITIALIZING...',
-                
-                // DATA (Default fallback)
-                streak: 1,
-                tasks: [
-                    { id: 1, name: 'Wake Up 05:00 AM', completed: false },
-                    { id: 2, name: 'CELPIP Study (2+ Hours)', completed: false },
-                    { id: 3, name: 'Gym Session', completed: false },
-                    { id: 4, name: 'LeetCode (1 Problem)', completed: false },
-                    { id: 5, name: 'Clean Diet (100% Adherence)', completed: false },
-                    { id: 6, name: 'Clean Living (No Slacking)', completed: false }
-                ],
-                
-                // SCHEDULES
-                wfhSchedule: [
-                    { time: '05:00 - 05:15', activity: 'Wake Up Protocol', notes: 'Cold Water. No Phone.' },
-                    { time: '05:15 - 06:00', activity: 'System Prep', notes: 'Coffee, Plan Day.' },
-                    { time: '06:00 - 07:45', activity: 'Deep Work: CELPIP', notes: 'Fresh Brain Block.' },
-                    { time: '07:45 - 09:15', activity: 'Physical Training', notes: 'Heavy Weights + Sauna.' },
-                    { time: '09:30 - 13:00', activity: 'AI Engineering', notes: 'Deep Focus.' },
-                    { time: '13:00 - 13:30', activity: 'Fuel + LeetCode', notes: '1 Problem (30 mins).' },
-                    { time: '13:30 - 17:00', activity: 'Engineering Cont.', notes: 'Execution.' },
-                    { time: '18:00 - 19:30', activity: 'CELPIP Block 2', notes: 'Speaking/Listening Drills.' },
-                    { time: '21:30', activity: 'Sleep Protocol', notes: 'Recovery.' }
-                ],
-                officeSchedule: [
-                    { time: '05:00 - 07:00', activity: 'Deep Work: CELPIP', notes: 'Study before commute.' },
-                    { time: '07:15 - 08:00', activity: 'Gym (Speed Run)', notes: 'High Intensity.' },
-                    { time: '08:15 - 09:00', activity: 'Commute', notes: 'Audio Learning / Reading.' },
-                    { time: '09:00 - 17:00', activity: 'Office Work', notes: 'Lunch: LeetCode.' },
-                    { time: '18:00 - 19:30', activity: 'Evening Review', notes: 'Light Study.' },
-                    { time: '21:30', activity: 'Sleep Protocol', notes: 'Recovery.' }
-                ],
-
-                init() {
-                    this.updateTime();
-                    setInterval(() => this.updateTime(), 1000);
-                    
-                    // Wait for window.db to be available then sync
-                    setTimeout(() => {
-                        this.syncCloud();
-                    }, 1500);
-                },
-
-                // AUTH FUNCTIONS
-                login() {
-                    if(this.passwordInput === this.systemPass) {
-                        this.authenticated = true;
-                        sessionStorage.setItem('sidhanth_auth', 'true');
-                        this.syncCloud();
-                    }
-                },
-                logout() {
-                    this.authenticated = false;
-                    sessionStorage.removeItem('sidhanth_auth');
-                    this.passwordInput = '';
-                },
-
-                setMode(newMode) {
-                    this.mode = newMode;
-                    this.manualOverride = true;
-                },
-
-                updateTime() {
-                    const now = new Date();
-                    this.currentTime = now.toLocaleTimeString('en-US', { hour12: false });
-                    this.currentDate = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-                    
-                    const hour = now.getHours();
-                    
-                    // Only auto-switch if user hasn't manually clicked a button
-                    if (!this.manualOverride) {
-                        const day = now.getDay(); 
-                        const isOffice = (day === 2 || day === 4); // Tue/Thu
-                        
-                        if (isOffice && this.mode !== 'office') this.mode = 'office';
-                        if (!isOffice && day !== 0 && day !== 6 && this.mode !== 'wfh') this.mode = 'wfh';
-                    }
-
-                    // Directives
-                    if (hour < 5) this.currentDirective = "SLEEP RECOVERY";
-                    else if (hour < 7) this.currentDirective = "DEEP STUDY (CELPIP)";
-                    else if (hour < 9) this.currentDirective = (this.mode === 'office') ? "COMMUTE / GYM" : "GYM / SAUNA";
-                    else if (hour < 13) this.currentDirective = "WORK (ENGINEERING)";
-                    else if (hour < 14) this.currentDirective = "LEETCODE + FUEL";
-                    else if (hour < 17) this.currentDirective = "WORK (ENGINEERING)";
-                    else if (hour < 20) this.currentDirective = "STUDY / DECOMPRESS";
-                    else if (hour < 22) this.currentDirective = "WIND DOWN";
-                    else this.currentDirective = "SLEEP RECOVERY";
-                },
-
-                get progress() {
-                    const done = this.tasks.filter(t => t.completed).length;
-                    return Math.round((done / this.tasks.length) * 100);
-                },
-
-                async toggleTask(id) {
-                    this.tasks = this.tasks.map(t => {
-                        if (t.id === id) {
-                            const newState = !t.completed;
-                            // Small Confetti
-                            if(newState) {
-                                confetti({
-                                    particleCount: 50,
-                                    spread: 60,
-                                    origin: { y: 0.7 }
-                                });
-                            }
-                            return { ...t, completed: newState };
-                        }
-                        return t;
-                    });
-                    
-                    // Big Confetti on 100%
-                    if (this.progress === 100) {
-                        this.triggerBigConfetti();
-                    }
-                    
-                    await this.saveToCloud();
-                },
-
-                triggerBigConfetti() {
-                    var duration = 3 * 1000;
-                    var animationEnd = Date.now() + duration;
-                    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-                    function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-                    var interval = setInterval(function() {
-                      var timeLeft = animationEnd - Date.now();
-                      if (timeLeft <= 0) return clearInterval(interval);
-                      var particleCount = 50 * (timeLeft / duration);
-                      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-                    }, 250);
-                },
-
-                // --- CLOUD SYNC LOGIC ---
-                async syncCloud() {
-                    if (!window.db) return;
-                    console.log("Starting Sync...");
-                    
-                    // We use 'users' collection and document 'sidhanth'
-                    const docRef = window.doc(window.db, "users", "sidhanth");
-                    
-                    window.onSnapshot(docRef, (docSnap) => {
-                        if (docSnap.exists()) {
-                            const data = docSnap.data();
-                            console.log("Data fetched:", data);
-                            
-                            const serverDate = data.lastOpenDate;
-                            const today = new Date().toDateString();
-                            
-                            // Check for New Day Reset
-                            if (serverDate !== today) {
-                                // It's a new day! Reset and push back to server
-                                console.log("New Day Detected. Resetting...");
-                                this.tasks = this.tasks.map(t => ({ ...t, completed: false }));
-                                if (serverDate) this.streak = (data.streak || 0) + 1;
-                                this.saveToCloud(today);
-                            } else {
-                                // Same day, just load data
-                                this.tasks = data.tasks;
-                                this.streak = data.streak;
-                            }
-                        } else {
-                            // First time ever: Create the doc
-                            console.log("No Data Found. Creating new user profile.");
-                            this.saveToCloud();
-                        }
-                    });
-                },
-
-                async saveToCloud(forceDate) {
-                    if (!window.db) return;
-                    const today = forceDate || new Date().toDateString();
-                    await window.setDoc(window.doc(window.db, "users", "sidhanth"), {
-                        tasks: this.tasks,
-                        streak: this.streak,
-                        lastOpenDate: today
-                    });
-                    console.log("Saved to Cloud.");
-                }
-            }
-        }
-    </script>
 </body>
 </html>
